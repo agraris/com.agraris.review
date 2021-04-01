@@ -1,5 +1,5 @@
 {
-    "name": "Agraris.Tools",
+    "name": "Agraris.Tools.Review",
     "rootNamespace": "",
     "references": [
         "GUID:b4318b6f3695442c4983c360248781db",
@@ -7,7 +7,8 @@
         "GUID:4139e191aa32f459e9eb2e331225ad7e"
     ],
     "includePlatforms": [
-        "Android"
+        "Android",
+        "Editor"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
