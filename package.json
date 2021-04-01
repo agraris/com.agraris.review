@@ -4,9 +4,6 @@
     "displayName": "Agraris Review",
     "description": "Easy implementation of Google Play In-App Review for Unity.",
     "unity": "2020.3",
-    "dependencies": {
-        "com.google.play.review": "1.4.0"
-    },
     "keywords": [
         "utility",
         "tool",
