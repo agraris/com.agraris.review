@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
+#if UNITY_ANDROID
 using Google.Play.Review;
+#endif
 
 namespace Agraris.Tools
 {
@@ -34,7 +36,7 @@ namespace Agraris.Tools
         }
         bool m_Success = false;
 
-        public bool enableLog { get; set; }
+        static bool enableLog { get; set; }
 
         void Awake()
         {
@@ -56,6 +58,10 @@ namespace Agraris.Tools
         {
             var type = typeof(IAReview);
             var mgr = new GameObject("IAReview", type).GetComponent<IAReview>();
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            enableLog = true;
+#endif
         }
 
         public void ShowReview(int playFrequency, int dayFrequency, ref DateTime lastShowDate)
