@@ -1,0 +1,30 @@
+{
+    "name": "com.agraris.review",
+    "version": "1.0.0",
+    "displayName": "Agraris Review",
+    "description": "Easy implementation of Google Play In-App Review for Unity.",
+    "unity": "2020.3",
+    "dependencies": {
+        "com.google.play.review": "1.4.0"
+    },
+    "keywords": [
+        "utility",
+        "tool",
+        "unity",
+        "android",
+        "review"
+    ],
+    "homepage": "https://agraris.github.io/",
+    "bugs": {
+        "url": "https://github.com//issues",
+        "email": "agrarisentertainment@gmail.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": ""
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Agraris Entertainment"
+    }
+}
