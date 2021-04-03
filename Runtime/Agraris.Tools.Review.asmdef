@@ -2,6 +2,7 @@
     "name": "Agraris.Tools.Review",
     "rootNamespace": "",
     "references": [
+        "GUID:6e4427926c53f2544b4c5c20d43e126d",
         "GUID:b4318b6f3695442c4983c360248781db",
         "GUID:b649415412a3d4e8a83df256b07478bb",
         "GUID:4139e191aa32f459e9eb2e331225ad7e"

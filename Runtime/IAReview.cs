@@ -1,16 +1,15 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Agraris.Tools.Core;
 #if UNITY_ANDROID
 using Google.Play.Review;
 #endif
 
 namespace Agraris.Tools
 {
-    public class IAReview : MonoBehaviour
+    public class IAReview : PersistentSingleton<IAReview>
     {
-        static public IAReview instance { get { return s_Instance; } }
-        static protected IAReview s_Instance;
 
         ReviewManager _reviewManager;
         PlayReviewInfo _playReviewInfo;
@@ -37,22 +36,6 @@ namespace Agraris.Tools
         bool m_Success = false;
 
         static bool enableLog { get; set; }
-
-        void Awake()
-        {
-            if (s_Instance == null)
-            {
-                gameObject.name = "IAReview";
-                DontDestroyOnLoad(gameObject);
-
-                s_Instance = this;
-            }
-            else
-            {
-                if (this != s_Instance)
-                    Destroy(this.gameObject);
-            }
-        }
 
         public static void InitReview()
         {
