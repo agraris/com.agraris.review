@@ -1,26 +1,25 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Agraris.Tools.Core;
 #if UNITY_ANDROID
 using Google.Play.Review;
 #endif
 
 namespace Agraris.Tools
 {
-    public class IAReview : PersistentSingleton<IAReview>
+    public static class IAReview
     {
 
-        ReviewManager _reviewManager;
-        PlayReviewInfo _playReviewInfo;
+        static ReviewManager _reviewManager;
+        static PlayReviewInfo _playReviewInfo;
 
-        int m_PlayFrequency = 2;
-        int m_DayFrequency = 2;
-        DateTime m_LastShowDate;
+        static int m_PlayFrequency = 2;
+        static int m_DayFrequency = 2;
+        static DateTime m_LastShowDate;
         static int m_CurrentPlayFrequency;
 
-        bool reviewWasShownLately => (m_LastShowDate.AddDays(m_DayFrequency) > DateTime.Today);
-        bool canRequestReview
+        static bool reviewWasShownLately => (m_LastShowDate.AddDays(m_DayFrequency) > DateTime.Today);
+        static bool canRequestReview
         {
             get
             {
@@ -33,21 +32,21 @@ namespace Agraris.Tools
                 return false;
             }
         }
-        bool m_Success = false;
+        static bool m_Success = false;
 
-        static bool enableLog { get; set; }
+        public static bool enableLog { get; set; }
 
-        public static void InitReview()
-        {
-            var type = typeof(IAReview);
-            var mgr = new GameObject("IAReview", type).GetComponent<IAReview>();
+        //         public static void InitReview()
+        //         {
+        //             var type = typeof(IAReview);
+        //             var mgr = new GameObject("IAReview", type).GetComponent<IAReview>();
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            enableLog = true;
-#endif
-        }
+        // #if UNITY_EDITOR || DEVELOPMENT_BUILD
+        //             enableLog = true;
+        // #endif
+        //         }
 
-        public void ShowReview(int playFrequency, int dayFrequency, ref DateTime lastShowDate)
+        public static void ShowReview(int playFrequency, int dayFrequency, ref DateTime lastShowDate)
         {
             m_PlayFrequency = playFrequency;
             m_DayFrequency = dayFrequency;
@@ -63,19 +62,19 @@ namespace Agraris.Tools
                 return;
             }
 
-            StartCoroutine(RequestReviewObject());
+            FloatingMonoBehaviour.StartCoroutine(RequestReviewObject());
 
             if (m_Success)
                 lastShowDate = DateTime.Today;
         }
 
-        IEnumerator RequestReviewObject()
+        static IEnumerator RequestReviewObject()
         {
             if (enableLog)
                 Debug.Log("Requesting Review Object");
 
 #if UNITY_EDITOR
-            StartCoroutine(ShowReviewObject());
+            FloatingMonoBehaviour.StartCoroutine(ShowReviewObject());
 #endif
 
             _reviewManager = new ReviewManager();
@@ -94,10 +93,10 @@ namespace Agraris.Tools
                 Debug.Log("Requesting Review Object Success");
             _playReviewInfo = requestFlowOperation.GetResult();
 
-            StartCoroutine(ShowReviewObject());
+            FloatingMonoBehaviour.StartCoroutine(ShowReviewObject());
         }
 
-        IEnumerator ShowReviewObject()
+        static IEnumerator ShowReviewObject()
         {
             if (enableLog)
                 Debug.Log("Showing Review Dialog");
