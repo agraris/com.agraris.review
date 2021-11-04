@@ -6,7 +6,7 @@
     "unity": "2019.3",
     "unityRelease": "1f1",
     "dependencies": {
-        "com.agraris.core": "1.0.0-alpha.1"
+        "com.agraris.core": "1.0.0-alpha.3"
     },
     "keywords": [
         "utility",
