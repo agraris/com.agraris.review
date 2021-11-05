@@ -1,6 +1,6 @@
 {
     "name": "com.agraris.review",
-    "version": "1.0.0-alpha.1",
+    "version": "1.0.0-alpha.2",
     "displayName": "Agraris Review",
     "description": "Easy implementation of Google Play In-App Review for Unity.",
     "unity": "2019.3",
