@@ -1,12 +1,12 @@
 {
     "name": "com.agraris.review",
-    "version": "1.0.0-alpha.2",
+    "version": "1.0.0-alpha.3",
     "displayName": "Agraris Review",
     "description": "Easy implementation of Google Play In-App Review for Unity.",
     "unity": "2019.3",
     "unityRelease": "1f1",
     "dependencies": {
-        "com.agraris.core": "1.0.0-alpha.3"
+        "com.agraris.core": "1.0.0-alpha.4"
     },
     "keywords": [
         "utility",
