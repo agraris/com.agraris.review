@@ -41,7 +41,7 @@ namespace Agraris.Tools
 #endif
         }
 
-        public void ShowReview(int playFrequency, int dayFrequency, ref DateTime lastShowDate)
+        public bool ShowReview(int playFrequency, int dayFrequency, ref DateTime lastShowDate)
         {
             _playFrequency = playFrequency;
             _dayFrequency = dayFrequency;
@@ -54,13 +54,20 @@ namespace Agraris.Tools
                 if (EnableLog)
                     Debug.LogWarningFormat("Today is {0}. You cannot Request Review until {1}.", DateTime.Today, lastShowDate.AddDays(dayFrequency));
 
-                return;
+                return false;
             }
 
             StartCoroutine(RequestReviewObject());
 
             if (_success)
+            {
                 lastShowDate = DateTime.Today;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         IEnumerator RequestReviewObject()
