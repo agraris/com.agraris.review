@@ -10,68 +10,62 @@ namespace Agraris.Tools
 {
     public class IAReview : PersistentSingleton<IAReview>
     {
-
+        static IAReview _thisGameObject;
         ReviewManager _reviewManager;
         PlayReviewInfo _playReviewInfo;
 
-        int m_PlayFrequency = 2;
-        int m_DayFrequency = 2;
-        DateTime m_LastShowDate;
-        static int m_CurrentPlayFrequency;
+        int _playFrequency = 2;
+        int _dayFrequency = 2;
+        DateTime _lastShowDate;
+        static int _currentPlayFrequency;
+        bool _success = false;
 
-        bool reviewWasShownLately => (m_LastShowDate.AddDays(m_DayFrequency) > DateTime.Today);
-        bool canRequestReview
+        bool ReviewWasShownLately => (_lastShowDate.AddDays(_dayFrequency) > DateTime.Today);
+        bool CanRequestReview
         {
             get
             {
-                if (reviewWasShownLately)
-                    return false;
-
-                if (m_CurrentPlayFrequency > m_PlayFrequency)
-                    return true;
-
+                if (ReviewWasShownLately) return false;
+                if (_currentPlayFrequency > _playFrequency) return true;
                 return false;
             }
         }
-        bool m_Success = false;
-
-        static bool enableLog { get; set; }
+        static bool EnableLog { get; set; }
 
         public static void InitReview()
         {
-            var type = typeof(IAReview);
-            var mgr = new GameObject("IAReview", type).GetComponent<IAReview>();
+            _thisGameObject = new GameObject("IAReview").AddComponent<IAReview>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            enableLog = true;
+            EnableLog = true;
 #endif
         }
 
         public void ShowReview(int playFrequency, int dayFrequency, ref DateTime lastShowDate)
         {
-            m_PlayFrequency = playFrequency;
-            m_DayFrequency = dayFrequency;
-            m_LastShowDate = lastShowDate;
+            _playFrequency = playFrequency;
+            _dayFrequency = dayFrequency;
+            _lastShowDate = lastShowDate;
 
-            m_CurrentPlayFrequency += 1;
+            _currentPlayFrequency += 1;
 
-            if (!canRequestReview)
+            if (!CanRequestReview)
             {
-                if (enableLog)
-                    Debug.LogFormat("Today is {0}. You cannot Request Review until {1}.", DateTime.Today, lastShowDate.AddDays(dayFrequency));
+                if (EnableLog)
+                    Debug.LogWarningFormat("Today is {0}. You cannot Request Review until {1}.", DateTime.Today, lastShowDate.AddDays(dayFrequency));
 
                 return;
             }
 
             StartCoroutine(RequestReviewObject());
 
-            if (m_Success)
+            if (_success)
                 lastShowDate = DateTime.Today;
         }
 
         IEnumerator RequestReviewObject()
         {
-            if (enableLog)
+            if (EnableLog)
                 Debug.Log("Requesting Review Object");
 
 #if UNITY_EDITOR
@@ -84,13 +78,13 @@ namespace Agraris.Tools
             yield return requestFlowOperation;
             if (requestFlowOperation.Error != ReviewErrorCode.NoError)
             {
-                if (enableLog)
+                if (EnableLog)
                     Debug.LogError("Requesting Review Object Error" + requestFlowOperation.Error.ToString());
 
                 yield break;
             }
 
-            if (enableLog)
+            if (EnableLog)
                 Debug.Log("Requesting Review Object Success");
             _playReviewInfo = requestFlowOperation.GetResult();
 
@@ -99,12 +93,12 @@ namespace Agraris.Tools
 
         IEnumerator ShowReviewObject()
         {
-            if (enableLog)
+            if (EnableLog)
                 Debug.Log("Showing Review Dialog");
 
 #if UNITY_EDITOR
-            m_Success = true;
-            m_CurrentPlayFrequency = 0;
+            _success = true;
+            _currentPlayFrequency = 0;
 #endif
 
             if (_reviewManager == null)
@@ -115,20 +109,20 @@ namespace Agraris.Tools
             _playReviewInfo = null; // Reset the object
             if (launchFlowOperation.Error != ReviewErrorCode.NoError)
             {
-                if (enableLog)
+                if (EnableLog)
                     Debug.LogError("Showing Review Object Error. " + launchFlowOperation.Error.ToString());
 
-                m_Success = false;
+                _success = false;
                 yield break;
             }
             // The flow has finished. The API does not indicate whether the user
             // reviewed or not, or even whether the review dialog was shown. Thus, no
             // matter the result, we continue our app flow.
-            if (enableLog)
+            if (EnableLog)
                 Debug.Log("Showing Review Object Success");
 
-            m_Success = true;
-            m_CurrentPlayFrequency = 0;
+            _success = true;
+            _currentPlayFrequency = 0;
         }
     }
 }
